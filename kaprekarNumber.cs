@@ -1,106 +1,65 @@
-﻿/**
- * 
- * @author - Sankalp Saxena
- * 
- **/
-
+ //@author - Sankalp Saxena
 
 using System;
-using System.Globalization;
-using System.Runtime.Remoting;
-
-namespace Aikya_Project
+namespace AikupperLimita_Project
 {
-    class MainClass
+    class KaprekarNumber
     {
         public static void Main(string[] args)
         {
-            long x, y, i = 10, j , leftHalf, rightHalf, square, digitSum, num,sqr_number,countDigits=0;
-            bool thereIsNumber = false;
-			
-            try
-			{
+		bool foundKaprekar = false;	
+
                 Console.WriteLine("Enter the range of non negative integers ");
-                 x = long.Parse(Console.ReadLine());
-                 y = long.Parse(Console.ReadLine());
+               
+                long.TryParse(Console.ReadLine(), out long lowerLimit);
+		long.TryParse(Console.ReadLine(), out long upperLimit);
 
-                while (x <= y)
+	        for (lowerLimit = 0; lowerLimit <= upperLimit; lowerLimit++) 
                 {
-                    num = x;
-                    square = num * num;
-                    sqr_number = square;
-
-
-                    while (!isZero(sqr_number))
+                    long number = lowerLimit;
+                    long square = number * number;
+                    int countDigits = CountDigits(square);
+                    long divisor = 1;
+                  
+                    for (long j = 1; j <= countDigits; j++)
                     {
-                        countDigits++;
-                        sqr_number = sqr_number / 10;
+                        long leftHalf = square / divisor;
+                        long rightHalf = square % divisor;
 
-                    }
 
-                    if (num == 1)
+                    if(rightHalf != 0 || square == number)
                     {
-                        Console.WriteLine("{0} is Kaprekar Number", num);
-                        thereIsNumber = true;
-                    }
-
-                        for (j = 1; j < countDigits; j++)
-                        {
-                            
-                                leftHalf = square / i;
-                                rightHalf = square % i;
-
-
-                            if(isnonzero(rightHalf))
-                            {
-                            	digitSum = leftHalf + rightHalf;
-
-                            	if (digitSum == x)
-                            	{
-                            		Console.WriteLine("{0} is Kaprekar Number", num);
-                            		thereIsNumber = true;
-                                    break;
-                            	}
-
-
-                            }
-                            i = i * 10;
+                        long digitSum = leftHalf + rightHalf;
+	 		        if (digitSum == lowerLimit)
+                        	{
+                           		Console.WriteLine("{0} is Kaprekar Number", number);
+                           		foundKaprekar = true;
+                        	        break;
+                           	}
                         }
-                        countDigits = 0;
-                        i = 10;
-                        j = 1;
-                        x++;
+    
+                        divisor = divisor *  10;
                     }
+                    countDigits = 0;
+                    divisor = 1;
+                 }
 
 
-                if (thereIsNumber == false)
-                    Console.WriteLine("No Kaprekar Numbers found in the given range");
-                
-            }
-            catch(DivideByZeroException e){
-                Console.WriteLine(e);
-            }
-            catch(System.OverflowException ){
-                Console.WriteLine("Please enter non negative integers range");
-            }
-
-
+                if (foundKaprekar == false) {
+     			Console.WriteLine("No Kaprekar Numbers found in the given range");
+    		}
         } //Close to Main
 
-        public static bool isnonzero(long rightHalf)
+        public static int CountDigits(long number)
         {
-            if (rightHalf != 0)
-                return true;
-            else
-                return false;
-        }
+            int countDigits = 0;
+	    while (number != 0)
+            {
+		countDigits++;
+                number = number / 10;
+	    }
+            return countDigits;
 
-        public static bool isZero(long sqr_number)
-        {
-            if (sqr_number == 0)
-                return true;
-            else
-                return false;
-        }
+	}
     }
 }
